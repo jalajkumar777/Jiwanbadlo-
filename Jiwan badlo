@@ -16,3 +16,139 @@ export const uploadVideo = async (file, type, userId, thumbnail) => { const ref 
 // 💸 Payout Methods (UPI, PayPal, Bank) export const requestPayout = async (userId, method, details) => { await firestore().collection('payouts').add({ userId, method, details, requestedAt: Date.now(), status: 'pending' }); };
 // 📱 App Entry Point (App.js) import React from 'react'; import {NavigationContainer} from '@react-navigation/native'; import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; import HomeScreen from './screens/Home'; import UploadScreen from './screens/Upload'; import WalletScreen from './screens/Wallet';
 const Tab = createBottomTabNavigator(); export default function App() { return ( <Tab.Navigator> <Tab.Screen name="Home" component={HomeScreen} /> <Tab.Screen name="Upload" component={UploadScreen} /> <Tab.Screen name="Wallet" component={WalletScreen} /> </Tab.Navigator> ); }
+// App.js
+
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  SafeAreaView,
+  StyleSheet,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+// Home Screen (Video Feed Placeholder)
+function HomeScreen() {
+  return (
+    <SafeAreaView style={styles.center}>
+      <Text style={styles.heading}>🏠 Home - Reels/Feed</Text>
+    </SafeAreaView>
+  );
+}
+
+// Profile Screen Placeholder
+function ProfileScreen() {
+  return (
+    <SafeAreaView style={styles.center}>
+      <Text style={styles.heading}>👤 Profile</Text>
+    </SafeAreaView>
+  );
+}
+
+// Mic Battle Game Screen
+function MicBattleScreen() {
+  const [selectedId, setSelectedId] = useState(null);
+  const contestants = [
+    { id: '1', name: '🎤 Voice Artist 1' },
+    { id: '2', name: '🎤 Voice Artist 2' },
+    { id: '3', name: '🎤 Voice Artist 3' },
+    { id: '4', name: '🎤 Voice Artist 4' },
+    { id: '5', name: '🎤 Voice Artist 5' },
+  ];
+
+  const voteNow = () => {
+    if (!selectedId) {
+      Alert.alert('⚠️ Vote Error', 'Please select a contestant before voting!');
+      return;
+    }
+    Alert.alert('✅ Vote Submitted', `₹19 deducted. You voted for ${selectedId}`);
+    // Firebase integration or backend API call goes here
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1, padding: 20 }}>
+      <Text style={styles.heading}>🏆 Jiwan Mic Battle</Text>
+      <Text style={styles.subtext}>
+        Vote for your favorite voice artist (₹19 per vote)
+      </Text>
+
+      <FlatList
+        data={contestants}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[
+              styles.card,
+              selectedId === item.id && { backgroundColor: '#90ee90' },
+            ]}
+            onPress={() => setSelectedId(item.id)}
+          >
+            <Text style={styles.cardText}>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+        style={{ marginTop: 15 }}
+      />
+
+      <Button title="Vote Now" onPress={voteNow} color="#2196F3" />
+    </SafeAreaView>
+  );
+}
+
+// Tab Navigation
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: true,
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+            if (route.name === 'Home') iconName = 'home';
+            else if (route.name === 'Profile') iconName = 'person';
+            else if (route.name === 'MicBattle') return <Text style={{ fontSize: 22 }}>🏆</Text>;
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="MicBattle" component={MicBattleScreen} options={{ title: 'Mic Battle' }} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
+// Styles
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  subtext: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  card: {
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: '#f2f2f2',
+    marginBottom: 10,
+  },
+  cardText: {
+    fontSize: 18,
+  },
+});
