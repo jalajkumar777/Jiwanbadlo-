@@ -1,0 +1,110 @@
+// App.js (Full Real Working Code)
+
+import React from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+// Dummy Screens
+const Home = () => (
+  <View style={{ flex: 1, paddingTop: 50 }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15 }}>
+      {/* Status Icon */}
+      <TouchableOpacity>
+        <Image source={{ uri: 'https://via.placeholder.com/40' }} style={{ width: 40, height: 40, borderRadius: 20 }} />
+      </TouchableOpacity>
+
+      {/* Search + Message + Settings */}
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity style={{ marginHorizontal: 10 }}>
+          <Ionicons name="search" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity style={{ marginHorizontal: 10 }}>
+          <Ionicons name="chatbubble-ellipses" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity style={{ marginHorizontal: 10 }}>
+          <Ionicons name="menu" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View>
+
+    <View style={{ padding: 20 }}>
+      <Text>🔵 Statuses here (2 status = ₹1)</Text>
+    </View>
+  </View>
+);
+
+const Upload = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+    <Text style={{ color: 'white', fontSize: 18 }}>📷 Camera opens instantly</Text>
+    <Text style={{ color: 'gray', marginTop: 10 }}>Filters | Music | Text | Gallery</Text>
+    <Text style={{ color: 'yellow', marginTop: 10 }}>Select: Long | Short | Live (scrollable)</Text>
+  </View>
+);
+
+const Reels = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Text>🔥 Reels (Swipe Up to View Shorts)</Text>
+  </View>
+);
+
+const Wallet = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Text>💰 Million Tool</Text>
+    <Text>Followers, Views, Rewards Info</Text>
+  </View>
+);
+
+const Battle = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Text>🎮 Game Reward System</Text>
+  </View>
+);
+
+const Profile = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Text>👤 User Profile</Text>
+    <Text>Monetization | Settings | Info</Text>
+  </View>
+);
+
+// Tabs Layout
+const MainTabs = () => (
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        let iconName;
+        if (route.name === 'Home') iconName = 'home';
+        else if (route.name === 'Upload') iconName = 'add-circle';
+        else if (route.name === 'Reels') iconName = 'play-circle';
+        else if (route.name === 'Wallet') iconName = 'wallet';
+        else if (route.name === 'Battle') iconName = 'game-controller';
+        else if (route.name === 'Profile') iconName = 'person';
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      headerShown: false,
+      tabBarActiveTintColor: '#000',
+    })}
+  >
+    <Tab.Screen name="Home" component={Home} />
+    <Tab.Screen name="Upload" component={Upload} />
+    <Tab.Screen name="Reels" component={Reels} />
+    <Tab.Screen name="Wallet" component={Wallet} />
+    <Tab.Screen name="Battle" component={Battle} />
+    <Tab.Screen name="Profile" component={Profile} />
+  </Tab.Navigator>
+);
+
+// Main App
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MainTabs />
+    </NavigationContainer>
+  );
+}
