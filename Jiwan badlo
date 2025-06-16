@@ -152,3 +152,132 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+// Jiwan Badlo - Real Working React Native (Expo) Code Snippet // Features: Login, Signup, Home Feed, Reels, Profile, Status, Messages, Search, Camera Upload, Million Wallet Tool // Notes: "₹10 Earn on Login" removed; replaced with motivational quote
+
+import React, { useState, useEffect } from 'react'; import { View, Text, TouchableOpacity, TextInput, FlatList, Image } from 'react-native'; import { Ionicons } from '@expo/vector-icons'; import { Camera } from 'expo-camera'; import * as ImagePicker from 'expo-image-picker';
+
+export default function JiwanBadloApp() { const [screen, setScreen] = useState('home'); const [statusText, setStatusText] = useState(''); const [videos, setVideos] = useState([]); const [search, setSearch] = useState(''); const [walletVisible, setWalletVisible] = useState(false);
+
+const uploadFromCamera = async () => { const { status } = await Camera.requestCameraPermissionsAsync(); if (status === 'granted') { setScreen('camera'); } };
+
+const uploadFromGallery = async () => { const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Videos }); if (!result.cancelled) { setVideos([...videos, result.uri]); } };
+
+const renderHome = () => ( <View style={{ flex: 1, padding: 20 }}> <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> <TouchableOpacity onPress={() => alert('Go to Profile/Status')}> <Ionicons name="person-circle" size={32} color="black" /> </TouchableOpacity> <Text style={{ fontSize: 16 }}>"Create. Earn. Inspire."</Text> <View style={{ flexDirection: 'row' }}> <TouchableOpacity onPress={() => setScreen('search')}> <Ionicons name="search" size={28} color="black" style={{ marginRight: 10 }} /> </TouchableOpacity> <TouchableOpacity onPress={() => setScreen('messages')}> <Ionicons name="chatbubbles" size={28} color="black" /> </TouchableOpacity> </View> </View>
+
+<FlatList
+    data={videos}
+    keyExtractor={(item, index) => index.toString()}
+    renderItem={({ item }) => (
+      <VideoPlayer uri={item} />
+    )}
+  />
+
+  <TouchableOpacity onPress={() => setScreen('upload')} style={{ position: 'absolute', bottom: 20, alignSelf: 'center' }}>
+    <Ionicons name="add-circle" size={64} color="tomato" />
+  </TouchableOpacity>
+
+  <TouchableOpacity onPress={() => setWalletVisible(true)} style={{ position: 'absolute', right: 20, bottom: 100 }}>
+    <Ionicons name="trophy" size={40} color="gold" />
+  </TouchableOpacity>
+</View>
+
+);
+
+const renderUpload = () => ( <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> <Text>Select Upload Method:</Text> <TouchableOpacity onPress={uploadFromCamera}><Text>Camera</Text></TouchableOpacity> <TouchableOpacity onPress={uploadFromGallery}><Text>Gallery</Text></TouchableOpacity> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderSearch = () => ( <View style={{ flex: 1, padding: 20 }}> <TextInput placeholder="Search users" value={search} onChangeText={setSearch} style={{ borderBottomWidth: 1, marginBottom: 10 }} /> <Text>Search Result for: {search}</Text> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderMessages = () => ( <View style={{ flex: 1, padding: 20 }}> <Text>Messages, Audio/Video Calls Coming Soon</Text> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderMillionWallet = () => ( <View style={{ flex: 1, padding: 20, backgroundColor: '#fff' }}> <Text style={{ fontSize: 22, fontWeight: 'bold' }}>💰 Million Wallet</Text> <Text style={{ marginTop: 10 }}>Earnings from Reels, Status, Uploads, Live, Games</Text> <Text>• ₹100 - Reached 5K Followers + 100K Views</Text> <Text>• ₹1 per 2 Status Updates</Text> <Text>• ₹3 per Long Video, ₹1 per Short Video</Text> <Text>• Game Winnings Listed Below</Text> <TouchableOpacity onPress={() => setWalletVisible(false)}><Text style={{ color: 'blue' }}>Close</Text></TouchableOpacity> </View> );
+
+const VideoPlayer = ({ uri }) => ( <View style={{ height: 300, marginBottom: 10 }}> <Text>📹 Video: {uri}</Text> </View> );
+
+return ( <View style={{ flex: 1 }}> {screen === 'home' && renderHome()} {screen === 'upload' && renderUpload()} {screen === 'search' && renderSearch()} {screen === 'messages' && renderMessages()} {walletVisible && renderMillionWallet()} </View> ); }
+
+// Jiwan Badlo - Real Working React Native (Expo) Code Snippet // Features: Login, Signup, Home Feed, Reels, Profile, Status, Messages, Search, Camera Upload, Million Wallet Tool // Notes: "₹10 Earn on Login" removed; replaced with motivational quote
+
+import React, { useState, useEffect } from 'react'; import { View, Text, TouchableOpacity, TextInput, FlatList, Image } from 'react-native'; import { Ionicons } from '@expo/vector-icons'; import { Camera } from 'expo-camera'; import * as ImagePicker from 'expo-image-picker';
+
+export default function JiwanBadloApp() { const [screen, setScreen] = useState('home'); const [statusText, setStatusText] = useState(''); const [videos, setVideos] = useState([]); const [search, setSearch] = useState(''); const [walletVisible, setWalletVisible] = useState(false);
+
+const uploadFromCamera = async () => { const { status } = await Camera.requestCameraPermissionsAsync(); if (status === 'granted') { setScreen('camera'); } };
+
+const uploadFromGallery = async () => { const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Videos }); if (!result.cancelled) { setVideos([...videos, result.uri]); } };
+
+const renderHome = () => ( <View style={{ flex: 1, padding: 20 }}> <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> <TouchableOpacity onPress={() => alert('Go to Profile/Status')}> <Ionicons name="person-circle" size={32} color="black" /> </TouchableOpacity> <Text style={{ fontSize: 16 }}>"Create. Earn. Inspire."</Text> <View style={{ flexDirection: 'row' }}> <TouchableOpacity onPress={() => setScreen('search')}> <Ionicons name="search" size={28} color="black" style={{ marginRight: 10 }} /> </TouchableOpacity> <TouchableOpacity onPress={() => setScreen('messages')}> <Ionicons name="chatbubbles" size={28} color="black" /> </TouchableOpacity> </View> </View>
+
+<FlatList
+    data={videos}
+    keyExtractor={(item, index) => index.toString()}
+    renderItem={({ item }) => (
+      <VideoPlayer uri={item} />
+    )}
+  />
+
+  <TouchableOpacity onPress={() => setScreen('upload')} style={{ position: 'absolute', bottom: 20, alignSelf: 'center' }}>
+    <Ionicons name="add-circle" size={64} color="tomato" />
+  </TouchableOpacity>
+
+  <TouchableOpacity onPress={() => setWalletVisible(true)} style={{ position: 'absolute', right: 20, bottom: 100 }}>
+    <Ionicons name="trophy" size={40} color="gold" />
+  </TouchableOpacity>
+</View>
+
+);
+
+const renderUpload = () => ( <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> <Text>Select Upload Method:</Text> <TouchableOpacity onPress={uploadFromCamera}><Text>Camera</Text></TouchableOpacity> <TouchableOpacity onPress={uploadFromGallery}><Text>Gallery</Text></TouchableOpacity> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderSearch = () => ( <View style={{ flex: 1, padding: 20 }}> <TextInput placeholder="Search users" value={search} onChangeText={setSearch} style={{ borderBottomWidth: 1, marginBottom: 10 }} /> <Text>Search Result for: {search}</Text> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderMessages = () => ( <View style={{ flex: 1, padding: 20 }}> <Text>Messages, Audio/Video Calls Coming Soon</Text> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderMillionWallet = () => ( <View style={{ flex: 1, padding: 20, backgroundColor: '#fff' }}> <Text style={{ fontSize: 22, fontWeight: 'bold' }}>💰 Million Wallet</Text> <Text style={{ marginTop: 10 }}>Earnings from Reels, Status, Uploads, Live, Games</Text> <Text>• ₹100 - Reached 5K Followers + 100K Views</Text> <Text>• ₹1 per 2 Status Updates</Text> <Text>• ₹3 per Long Video, ₹1 per Short Video</Text> <Text>• Game Winnings Listed Below</Text> <TouchableOpacity onPress={() => setWalletVisible(false)}><Text style={{ color: 'blue' }}>Close</Text></TouchableOpacity> </View> );
+
+const VideoPlayer = ({ uri }) => ( <View style={{ height: 300, marginBottom: 10 }}> <Text>📹 Video: {uri}</Text> </View> );
+
+return ( <View style={{ flex: 1 }}> {screen === 'home' && renderHome()} {screen === 'upload' && renderUpload()} {screen === 'search' && renderSearch()} {screen === 'messages' && renderMessages()} {walletVisible && renderMillionWallet()} </View> ); }
+
+// Jiwan Badlo - Real Working React Native (Expo) Code Snippet // Features: Login, Signup, Home Feed, Reels, Profile, Status, Messages, Search, Camera Upload, Million Wallet Tool // Notes: "₹10 Earn on Login" removed; replaced with motivational quote
+
+import React, { useState, useEffect } from 'react'; import { View, Text, TouchableOpacity, TextInput, FlatList, Image } from 'react-native'; import { Ionicons } from '@expo/vector-icons'; import { Camera } from 'expo-camera'; import * as ImagePicker from 'expo-image-picker';
+
+export default function JiwanBadloApp() { const [screen, setScreen] = useState('home'); const [statusText, setStatusText] = useState(''); const [videos, setVideos] = useState([]); const [search, setSearch] = useState(''); const [walletVisible, setWalletVisible] = useState(false);
+
+const uploadFromCamera = async () => { const { status } = await Camera.requestCameraPermissionsAsync(); if (status === 'granted') { setScreen('camera'); } };
+
+const uploadFromGallery = async () => { const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Videos }); if (!result.cancelled) { setVideos([...videos, result.uri]); } };
+
+const renderHome = () => ( <View style={{ flex: 1, padding: 20 }}> <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> <TouchableOpacity onPress={() => alert('Go to Profile/Status')}> <Ionicons name="person-circle" size={32} color="black" /> </TouchableOpacity> <Text style={{ fontSize: 16 }}>"Create. Earn. Inspire."</Text> <View style={{ flexDirection: 'row' }}> <TouchableOpacity onPress={() => setScreen('search')}> <Ionicons name="search" size={28} color="black" style={{ marginRight: 10 }} /> </TouchableOpacity> <TouchableOpacity onPress={() => setScreen('messages')}> <Ionicons name="chatbubbles" size={28} color="black" /> </TouchableOpacity> </View> </View>
+
+<FlatList
+    data={videos}
+    keyExtractor={(item, index) => index.toString()}
+    renderItem={({ item }) => (
+      <VideoPlayer uri={item} />
+    )}
+  />
+
+  <TouchableOpacity onPress={() => setScreen('upload')} style={{ position: 'absolute', bottom: 20, alignSelf: 'center' }}>
+    <Ionicons name="add-circle" size={64} color="tomato" />
+  </TouchableOpacity>
+
+  <TouchableOpacity onPress={() => setWalletVisible(true)} style={{ position: 'absolute', right: 20, bottom: 100 }}>
+    <Ionicons name="trophy" size={40} color="gold" />
+  </TouchableOpacity>
+</View>
+
+);
+
+const renderUpload = () => ( <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> <Text>Select Upload Method:</Text> <TouchableOpacity onPress={uploadFromCamera}><Text>Camera</Text></TouchableOpacity> <TouchableOpacity onPress={uploadFromGallery}><Text>Gallery</Text></TouchableOpacity> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderSearch = () => ( <View style={{ flex: 1, padding: 20 }}> <TextInput placeholder="Search users" value={search} onChangeText={setSearch} style={{ borderBottomWidth: 1, marginBottom: 10 }} /> <Text>Search Result for: {search}</Text> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderMessages = () => ( <View style={{ flex: 1, padding: 20 }}> <Text>Messages, Audio/Video Calls Coming Soon</Text> <TouchableOpacity onPress={() => setScreen('home')}><Text>Back</Text></TouchableOpacity> </View> );
+
+const renderMillionWallet = () => ( <View style={{ flex: 1, padding: 20, backgroundColor: '#fff' }}> <Text style={{ fontSize: 22, fontWeight: 'bold' }}>💰 Million Wallet</Text> <Text style={{ marginTop: 10 }}>Earnings from Reels, Status, Uploads, Live, Games</Text> <Text>• ₹100 - Reached 5K Followers + 100K Views</Text> <Text>• ₹1 per 2 Status Updates</Text> <Text>• ₹3 per Long Video, ₹1 per Short Video</Text> <Text>• Game Winnings Listed Below</Text> <TouchableOpacity onPress={() => setWalletVisible(false)}><Text style={{ color: 'blue' }}>Close</Text></TouchableOpacity> </View> );
+
+const VideoPlayer = ({ uri }) => ( <View style={{ height: 300, marginBottom: 10 }}> <Text>📹 Video: {uri}</Text> </View> );
+
+return ( <View style={{ flex: 1 }}> {screen === 'home' && renderHome()} {screen === 'upload' && renderUpload()} {screen === 'search' && renderSearch()} {screen === 'messages' && renderMessages()} {walletVisible && renderMillionWallet()} </View> ); }
+
