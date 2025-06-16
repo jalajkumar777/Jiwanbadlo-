@@ -171,5 +171,55 @@ function MainTabs() { return ( <Tab.Navigator initialRouteName="Home"> <Tab.Scre
 export default function App() { return ( <NavigationContainer> <Stack.Navigator screenOptions={{ headerShown: false }}> <Stack.Screen name="Main" component={MainTabs} /> <Stack.Screen name="Messages" component={MessageScreen} /> <Stack.Screen name="Settings" component={SettingsScreen} /> <Stack.Screen name="StatusUpload" component={StatusUpload} /> <Stack.Screen name="VideoCamera" component={VideoCamera} /> </Stack.Navigator> </NavigationContainer> ); }
 
 // 🔗 Add additional features: camera filter, earn by view, messaging, and ad setup inside corresponding screens.
+// ProfitAnalyticsScreen.js import React, { useEffect, useState } from 'react'; import { View, Text, ScrollView } from 'react-native'; import { getFirestore, collection, getDocs } from 'firebase/firestore';
+
+const ProfitAnalyticsScreen = () => { const [totalUsers, setTotalUsers] = useState(0); const [totalWatchPayout, setTotalWatchPayout] = useState(0); const [totalReferralPayout, setTotalReferralPayout] = useState(0); const [totalUploadPayout, setTotalUploadPayout] = useState(0); const [estimatedAdRevenue, setEstimatedAdRevenue] = useState(0);
+
+const db = getFirestore();
+
+useEffect(() => { const fetchData = async () => { const usersSnapshot = await getDocs(collection(db, 'users')); setTotalUsers(usersSnapshot.size);
+
+let watch = 0, referral = 0, upload = 0;
+
+  usersSnapshot.forEach(doc => {
+    const data = doc.data();
+    watch += data.watchEarning || 0;
+    referral += data.referralEarning || 0;
+    upload += data.uploadEarning || 0;
+  });
+
+  setTotalWatchPayout(watch);
+  setTotalReferralPayout(referral);
+  setTotalUploadPayout(upload);
+
+  // Estimated revenue (assume ₹0.20 per video watched x views)
+  const estimatedRevenue = (watch / 0.10) * 0.20; 
+  setEstimatedAdRevenue(estimatedRevenue);
+};
+
+fetchData();
+
+}, []);
+
+const totalPayout = totalWatchPayout + totalReferralPayout + totalUploadPayout; const netProfit = estimatedAdRevenue - totalPayout;
+
+return ( <ScrollView style={{ padding: 20 }}> <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>📊 Admin Profit Dashboard</Text>
+
+<Text>Total Active Users: {totalUsers}</Text>
+  <Text>Watch Video Payout: ₹{totalWatchPayout.toFixed(2)}</Text>
+  <Text>Referral Bonus Payout: ₹{totalReferralPayout.toFixed(2)}</Text>
+  <Text>Upload Video Payout: ₹{totalUploadPayout.toFixed(2)}</Text>
+  <Text>------------------------------</Text>
+  <Text>💰 Estimated Ad Revenue: ₹{estimatedAdRevenue.toFixed(2)}</Text>
+  <Text>💸 Total Payout Given: ₹{totalPayout.toFixed(2)}</Text>
+  <Text style={{ fontWeight: 'bold', color: netProfit >= 0 ? 'green' : 'red' }}>
+    📈 Net Profit: ₹{netProfit.toFixed(2)}
+  </Text>
+</ScrollView>
+
+); };
+
+export default ProfitAnalyticsScreen;
+
 
 
